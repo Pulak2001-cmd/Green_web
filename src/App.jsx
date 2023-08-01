@@ -8,7 +8,7 @@ import HomePage from './component/HomePage';
 
 function App() {
   useEffect(() => {
-    console.log(firebaseConfig);
+    //console.log(firebaseConfig);
   }, []);
 
   return (
