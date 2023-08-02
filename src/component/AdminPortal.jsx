@@ -200,6 +200,22 @@ function AdminPortal() {
     const response = await axios.post(url, data);
     alert('Notification sent successfully')
   }
+  const blockUser = async() => {
+    await userDb.where('phone', '==', searchPhone).get().then(async(query) => {
+        const data = query.docs[0].data();
+        let blockStatus = data.blocked 
+        let blockTo = 0
+        if (blockStatus === 0){
+            blockTo = 1;
+        }
+        await query.docs[0].ref.update({ blocked : blockTo})
+        setSearchPhone('')
+        setData({});
+        let str = `${blockTo === 1 ? 'Blocked':'Unblocked'} Successfully`
+        alert(str)
+
+    }).catch(err => console.log(err.message))
+  }
   return (
     <div>
       <nav class="navbar navbar-expand-lg bg-body-tertiary">
@@ -262,7 +278,7 @@ function AdminPortal() {
                 <div className="d-flex flex-row flex-lg-column align-items-center justify-content-center mt-3">
                     <h5>Block / Unblock</h5>
                     <div className="d-flex flex-column mt-lg-1 ms-lg-0 ms-5">
-                        <button className={`btn btn-${data.blocked === 0 ? 'danger':'success'}`}> {data.blocked === 0 ? 'Block' : 'Unblock'} </button>
+                        <button className={`btn btn-${data.blocked === 0 ? 'danger':'success'}`} onClick={blockUser}> {data.blocked === 0 ? 'Block' : 'Unblock'} </button>
                     </div>
                 </div>
                 <div className="d-flex flex-row flex-lg-column align-items-center justify-content-center mt-3">
