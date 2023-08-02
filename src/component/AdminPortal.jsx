@@ -8,6 +8,8 @@ function AdminPortal() {
   const userDb = firebase.firestore().collection('newData');
   const transactionDb = firebase.firestore().collection('transactions');
   const updateDb = firebase.firestore().collection('Update');
+  const [rewardAmount, setRewardAmount] = useState(0);
+  const [rewradDetails, setRewradDetails] = useState('');
   const navigation = useNavigate();
   const logout = () =>{ 
     localStorage.removeItem('admin');
@@ -29,8 +31,26 @@ function AdminPortal() {
     }
     getData();
   }, [])
+  const setDatas1 = ()=> {
+    userDb.get().then((query)=> {
+        const list = query.docs;
+        for(let i=0; i<list.length; i++){
+            list[i].ref.update({
+                blocked: 0
+            })
+        }
+    })
+  }
   const [disable, setDisable] = useState(false);
   const sendReturn = async()=> {
+    var today = new Date();
+    var tt = `${today.getFullYear()}/${today.getMonth()+1}/${today.getDate()} ${today.getHours()}:${today.getMinutes()}:${today.getSeconds()}`
+    updateDb.where('id', '==', 7412).get().then((querySnapshot)=> {
+        const data = querySnapshot.docs[0];
+        data.ref.update({
+            date: tt,
+        })
+    })
     await db.get().then(async (querySnapshot)=>{
         console.log(querySnapshot.docs.length);
         const docs = querySnapshot.docs;
@@ -63,9 +83,11 @@ function AdminPortal() {
                     }
                     const userData = dc[j].data();
                     console.log(userData.balance, returns[phone]);
+                    const data = dc[j].data();
                     dc[j].ref.update({
                         balance: userData.balance+returns[phone],
-                        yesterdayEarning: returns[phone]
+                        yesterdayEarning: returns[phone],
+                        totalEarning: data.totalEarning + returns[phone]
                     })
                     transactionDb.add({
                         id: dc[j].id,
@@ -98,6 +120,32 @@ function AdminPortal() {
     console.log('nnjn');
     setSearchPhone(e);
     await searchUser(e);
+  }
+  const sendReward = ()=> {
+    if(rewardAmount === 0 || rewardAmount === ''){
+        alert("Please enter the amount to be rewarded");
+        return;
+    }
+    else if(rewradDetails === ''){
+        alert('Please Enter the reward details');
+        return;
+    }
+    var today = new Date();
+    var tt = `${today.getFullYear()}/${today.getMonth()+1}/${today.getDate()} ${today.getHours()}:${today.getMinutes()}:${today.getSeconds()}`
+    userDb.where('phone', '==', searchPhone).get().then(async (query)=> {
+        const dt = query.docs[0].data().balance;
+        await query.docs[0].ref.update({
+            balance: dt+ parseInt(rewardAmount),
+        })
+        await transactionDb.add({
+            id: query.docs[0].id,
+            phone: searchPhone,
+            amount: rewardAmount,
+            time: tt,
+            message: "Success! "+rewradDetails
+        })
+        alert("Bonus Sent")
+    })
   }
   const [searchPhone, setSearchPhone] = useState('');
   const [data, setData] = useState({});
@@ -185,6 +233,7 @@ function AdminPortal() {
             <textarea type="text" className="form-control m-3" placeholder="Enter body" value={body} onChange={(e)=> setBody(e.target.value)}/>
             <button className="btn btn-primary" onClick={send}>Send Notification</button>
         </div>
+        {/* <button className="btn btn-primary" onClick={setDatas1}>Send data</button> */}
         <div className="m-5">
             
             <input type="text" value={searchPhone} onChange={(e)=> {search(e.target.value)}} className="form-control" placeholder="Search Phone Number" width='200px'/>
@@ -196,24 +245,62 @@ function AdminPortal() {
                 <h2>No records found</h2>
                 </div>
             :
-            <table class="table mt-5">
-            <thead>
-                <tr>
-                <th scope="col">id</th>
-                <th scope="col">Balance</th>
-                <th scope="col">Plans</th>
-                <th scope="col">Yesterday Earning</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <th scope="row">{data.id}</th>
-                    <td>{data.balance}</td>
-                    <td>{getActivePlans(data.active_plan)}</td>
-                    <td>{data.yesterdayEarning}</td>
-                </tr>
-            </tbody>
-            </table>}
+
+            <div className="d-flex flex-column flex-lg-row align-items-start justify-content-around">
+                <div className="d-flex flex-row flex-lg-column align-items-center justify-content-center mt-3">
+                    <h5>ID</h5>
+                    <p className="ms-5 m-lg-0">{data.id}</p>
+                </div>
+                <div className="d-flex flex-row flex-lg-column align-items-center justify-content-center mt-3">
+                    <h5>Balace</h5>
+                    <p className="ms-5 m-lg-0">{parseFloat(data.balance).toFixed(2)}</p>
+                </div>
+                <div className="d-flex flex-row flex-lg-column align-items-center justify-content-center mt-3">
+                    <h5>Yesterday Earning</h5>
+                    <p className="ms-5 m-lg-0">{data.yesterdayEarning}</p>
+                </div>
+                <div className="d-flex flex-row flex-lg-column align-items-center justify-content-center mt-3">
+                    <h5>Block / Unblock</h5>
+                    <div className="d-flex flex-column mt-lg-1 ms-lg-0 ms-5">
+                        <button className={`btn btn-${data.blocked === 0 ? 'danger':'success'}`}> {data.blocked === 0 ? 'Block' : 'Unblock'} </button>
+                    </div>
+                </div>
+                <div className="d-flex flex-row flex-lg-column align-items-center justify-content-center mt-3">
+                    <h5>Send Reward</h5>
+                    <div className="d-flex flex-column mt-lg-1 ms-lg-0 ms-5">
+                        <input type="number" value={rewardAmount} onChange={(e)=> setRewardAmount(e.target.value)} className="form-control mt-2" placeholder="Enter Amount here" />
+                        <input type="text" value={rewradDetails} onChange={(e)=> setRewradDetails(e.target.value)}className="form-control mt-2" placeholder="Enter Message here" />
+                        <button className="btn btn-primary mt-2" onClick={sendReward}>Send</button>
+                    </div>
+                </div>
+                <div className="d-flex flex-row flex-lg-column align-items-start align-items-lg-center justify-content-center mt-3">
+                    <h5>Plans</h5>
+                    <div className="d-flex flex-column align-items-start align-items-lg-center ms-5 m-lg-0">
+                        {data.active_plan.map((i, index)=> {
+                            return <p key={index}>{i}</p>
+                        })}
+                    </div>
+                </div>
+            </div>
+            // <table class="table mt-5">
+            // <thead>
+            //     <tr>
+            //     <th scope="col">id</th>
+            //     <th scope="col">Balance</th>
+            //     <th scope="col">Plans</th>
+            //     <th scope="col">Yesterday Earning</th>
+            //     </tr>
+            // </thead>
+            // <tbody>
+            //     <tr>
+            //         <th scope="row">{data.id}</th>
+            //         <td>{data.balance}</td>
+            //         <td>{getActivePlans(data.active_plan)}</td>
+            //         <td>{data.yesterdayEarning}</td>
+            //     </tr>
+            // </tbody>
+            // </table>
+            }
         </div>
     </div>
   )
