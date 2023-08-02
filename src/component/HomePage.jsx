@@ -53,7 +53,7 @@ export default function HomePage() {
   const [email,setEmail] = useState();
   const [phone, setPhone] = useState();
   return (
-    <div>
+    <>
       <nav class="navbar bg-dark border-bottom border-body" data-bs-theme="dark">
       <nav class="navbar navbar-expand-lg bg-dark">
         <div class="container-fluid">
@@ -80,18 +80,18 @@ export default function HomePage() {
         </div>
       </nav>
       </nav>
-      <section id="home" style={{backgroundImage: `url('/background.avif')`, backgroundRepeat: 'no-repeat', backgroundSize: 'cover', width: '100%', height: '90vh'}} className='d-flex flex-column flex-lg-row align-items-center justify-content-around'>
+      <section id="home" style={{backgroundImage: `url('/background.avif')`, backgroundRepeat: 'no-repeat', backgroundSize: 'cover', width: '100%', minHeight: '90vh'}} className='d-flex flex-column flex-lg-row align-items-center justify-content-around'>
           <div className="d-flex flex-column">
             <h1 className="text-light">INDIAGREEN</h1>
             <p className="text-light">Welcome to new edge technology</p>
-            <div className="mt-5 d-flex flex-row" >
+            <div className="mt-5 d-flex flex-column flex-lg-row" >
               <div className="d-flex flex-row align-items-center justify-content-center border-1 border-light border p-1 rounded-3 m-2">
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="white" class="bi bi-google-play" viewBox="0 0 16 16">
                 <path d="M14.222 9.374c1.037-.61 1.037-2.137 0-2.748L11.528 5.04 8.32 8l3.207 2.96 2.694-1.586Zm-3.595 2.116L7.583 8.68 1.03 14.73c.201 1.029 1.36 1.61 2.303 1.055l7.294-4.295ZM1 13.396V2.603L6.846 8 1 13.396ZM1.03 1.27l6.553 6.05 3.044-2.81L3.333.215C2.39-.341 1.231.24 1.03 1.27Z"/>
               </svg>
               <div className="d-flex flex-column">
-              <p className="text-light ms-3 fs-5 mb-0 mt-2">Get it on</p>
-              <p className="text-light ms-3 fs-5 fw-bold"> Google Play</p>
+                <p className="text-light ms-3 fs-5 mb-0 mt-2">Get it on</p>
+                <p className="text-light ms-3 fs-5 fw-bold"> Google Play</p>
               </div>
               </div>
               <div className="d-flex flex-row align-items-center justify-content-center border-1 border-light border p-1 rounded-3 m-2">
@@ -99,17 +99,20 @@ export default function HomePage() {
                 <path d="M11.182.008C11.148-.03 9.923.023 8.857 1.18c-1.066 1.156-.902 2.482-.878 2.516.024.034 1.52.087 2.475-1.258.955-1.345.762-2.391.728-2.43Zm3.314 11.733c-.048-.096-2.325-1.234-2.113-3.422.212-2.189 1.675-2.789 1.698-2.854.023-.065-.597-.79-1.254-1.157a3.692 3.692 0 0 0-1.563-.434c-.108-.003-.483-.095-1.254.116-.508.139-1.653.589-1.968.607-.316.018-1.256-.522-2.267-.665-.647-.125-1.333.131-1.824.328-.49.196-1.422.754-2.074 2.237-.652 1.482-.311 3.83-.067 4.56.244.729.625 1.924 1.273 2.796.576.984 1.34 1.667 1.659 1.899.319.232 1.219.386 1.843.067.502-.308 1.408-.485 1.766-.472.357.013 1.061.154 1.782.539.571.197 1.111.115 1.652-.105.541-.221 1.324-1.059 2.238-2.758.347-.79.505-1.217.473-1.282Z"/>
                 <path d="M11.182.008C11.148-.03 9.923.023 8.857 1.18c-1.066 1.156-.902 2.482-.878 2.516.024.034 1.52.087 2.475-1.258.955-1.345.762-2.391.728-2.43Zm3.314 11.733c-.048-.096-2.325-1.234-2.113-3.422.212-2.189 1.675-2.789 1.698-2.854.023-.065-.597-.79-1.254-1.157a3.692 3.692 0 0 0-1.563-.434c-.108-.003-.483-.095-1.254.116-.508.139-1.653.589-1.968.607-.316.018-1.256-.522-2.267-.665-.647-.125-1.333.131-1.824.328-.49.196-1.422.754-2.074 2.237-.652 1.482-.311 3.83-.067 4.56.244.729.625 1.924 1.273 2.796.576.984 1.34 1.667 1.659 1.899.319.232 1.219.386 1.843.067.502-.308 1.408-.485 1.766-.472.357.013 1.061.154 1.782.539.571.197 1.111.115 1.652-.105.541-.221 1.324-1.059 2.238-2.758.347-.79.505-1.217.473-1.282Z"/>
               </svg>
-              <p className="text-light ms-3 fs-5 mt-2">Get it on Apple Store</p>
+              <div className="d-flex flex-column">
+                <p className="text-light ms-3 fs-5 mb-0 mt-2">Get it on</p>
+                <p className="text-light ms-3 fs-5 fw-bold"> Apple Store</p>
+              </div>
               </div>
             </div>
           </div>
-          <img src='/app.jpg' style={{height: '80vh', width: '20vw', borderRadius: 10}}/>
+          <img src='/app.jpg' style={{height: '80vh', minWidth: '20vw', borderRadius: 10}}/>
       </section>
-      <section id='about' style={{backgroundColor: '#000', height: '80vh', alignItems: 'center', justifyContent: 'center', display: 'flex'}}>
+      <section id='about' style={{backgroundColor: '#000', minHeight: '80vh', alignItems: 'center', justifyContent: 'center', display: 'flex'}}>
         <div className="d-flex flex-row align-items-center justify-content-center" style={{ margin: 10}}>
           <div className='d-flex flex-column m-2 p-4 align-items-start justify-content-start col-3' style={{backgroundColor: '#183014', borderRadius: 12, minHeight: '400px'}}>
               <p className="text-light">Our story, our future</p>
-              <h6 className="text-light">Wazel Ali</h6>
+              <h6 className="text-light">India Green</h6>
               <div className="d-flex flex-row align-items-center justify-content-center">
                 {[1,2,3].map((i, index)=> {
                   return <svg key={index} className='ms-1' xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="white" class="bi bi-star-fill" viewBox="0 0 16 16">
@@ -124,7 +127,7 @@ export default function HomePage() {
           </div>
         </div>
       </section>
-      <section id='plans' style={{backgroundColor: '#000', height: '120vh', alignItems: 'center', justifyContent: 'center', display: 'flex'}}>
+      <section id='plans' style={{backgroundColor: '#000', minHeight: '120vh', alignItems: 'center', justifyContent: 'center', display: 'flex'}}>
           <div className="col-9 p-5 d-flex flex-column align-items-center justify-content-center" style={{backgroundColor: '#081206', borderRadius: 12}}>
               <h2 className="text-light">Plans</h2>
               <div className="d-flex flex-column flex-lg-row m-2">
@@ -167,7 +170,7 @@ export default function HomePage() {
               </div>
           </div>
       </section>
-      <section id="upcoming" style={{height: '60vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
+      <section id="upcoming" style={{minHeight: '60vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
           <h4>Upcoming Plans</h4>
           <div className="d-flex flex-row align-items-center justify-content-around">
             <div className="d-flex flex-column m-4 align-items-center">
@@ -192,10 +195,7 @@ export default function HomePage() {
             </div>
           </div>
       </section>
-      <section id="terms" style={{marginTop: 5, backgroundColor: '#000', height: '20vh'}} className='d-flex flex-row align-items-center justify-content-center'>
-
-      </section>
-      <section id="contact" style={{backgroundColor: '#000', height: '60vh'}}>
+      <section id="contact" style={{backgroundColor: '#000', minHeight: '60vh'}}>
           <div className="d-flex flex-column flex-lg-row align-items-center justify-content-center pt-5">
                 <div className="d-flex flex-column col-5 align-items-center justify-content-center">
                   {/* <div className="d-flex flex-column">
@@ -223,6 +223,6 @@ export default function HomePage() {
                 </div>
           </div>
       </section>
-    </div>
+    </>
   )
 }
