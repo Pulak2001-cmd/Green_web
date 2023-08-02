@@ -110,7 +110,7 @@ export default function HomePage() {
       </section>
       <section id='about' style={{backgroundColor: '#000', minHeight: '80vh', alignItems: 'center', justifyContent: 'center', display: 'flex'}}>
         <div className="d-flex flex-column flex-lg-row align-items-center justify-content-center" style={{ margin: 10}}>
-          <div className='d-flex flex-column m-2 p-4 align-items-start justify-content-start col-3' style={{backgroundColor: '#183014', borderRadius: 12, minHeight: '400px'}}>
+          <div className='d-flex flex-column m-2 p-4 align-items-start justify-content-start col-lg-3' style={{backgroundColor: '#000', borderRadius: 12, minHeight: '400px'}}>
               <p className="text-light">Our story, our future</p>
               <h6 className="text-light">India Green</h6>
               <div className="d-flex flex-row align-items-center justify-content-center">
@@ -122,13 +122,13 @@ export default function HomePage() {
               </div>
               <p className="text-light text-justify mt-3">Lorem ipsum dolor sit amet consectetur adipisicing elit. Pariatur ducimus vero delectus, similique laudantium recusandae iste rem eaque excepturi blanditiis, dignissimos odit ipsam aut possimus </p>
           </div>
-          <div className='d-flex col-3'>
-                <img src='/about.jpeg' style={{height: '400px', width: '400px', borderRadius: 10}}/>
+          <div className='d-flex col-lg-3'>
+                <img src='/about.jpeg' style={{height: '400px', width: '300px', borderRadius: 10}}/>
           </div>
         </div>
       </section>
       <section id='plans' style={{backgroundColor: '#000', minHeight: '120vh', alignItems: 'center', justifyContent: 'center', display: 'flex'}}>
-          <div className="col-9 p-5 d-flex flex-column align-items-center justify-content-center" style={{backgroundColor: '#081206', borderRadius: 12}}>
+          <div className="col-lg-9 p-5 d-flex flex-column align-items-center justify-content-center" style={{backgroundColor: '#081206', borderRadius: 12}}>
               <h2 className="text-light">Plans</h2>
               <div className="d-flex flex-column flex-lg-row m-2">
                 <div className="d-flex flex-column align-items-center justify-content-center m-4">
@@ -197,7 +197,7 @@ export default function HomePage() {
       </section>
       <section id="contact" style={{backgroundColor: '#000', minHeight: '60vh'}}>
           <div className="d-flex flex-column flex-lg-row align-items-center justify-content-center pt-5">
-                <div className="d-flex flex-column col-5 align-items-center justify-content-center">
+                <div className="d-flex flex-column col-lg-5 align-items-center justify-content-center">
                   {/* <div className="d-flex flex-column">
                     <label className="text-light mt-3 mb-3 fs-4">Email Address</label>
                     <input type="email" placeholder="Type your email address" style={{ padding: 10, backgroundColor: 'transparent', color: '#FFFF', border: '1px solid #FFFF', borderRadius: 8}}/>
@@ -218,8 +218,8 @@ export default function HomePage() {
                     <button className='btn btn-outline-primary'>Send</button>
                   </div>
                 </div>
-                <div className="d-flex flex-column col-5 align-items-center justify-content-center">
-                  <img src="/contact.jpg" style={{height: '300px', width: '600px'}}/>
+                <div className="d-flex flex-column col-lg-5 align-items-center justify-content-center">
+                  <img src="/contact.jpg" style={{height: '250px', width: '250px'}}/>
                 </div>
           </div>
       </section>
