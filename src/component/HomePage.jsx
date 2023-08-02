@@ -53,7 +53,7 @@ export default function HomePage() {
   const [email,setEmail] = useState();
   const [phone, setPhone] = useState();
   return (
-    <>
+    <div>
       <nav class="navbar bg-dark border-bottom border-body" data-bs-theme="dark">
       <nav class="navbar navbar-expand-lg bg-dark">
         <div class="container-fluid">
@@ -109,7 +109,7 @@ export default function HomePage() {
           <img src='/app.jpg' style={{height: '80vh', minWidth: '20vw', borderRadius: 10}}/>
       </section>
       <section id='about' style={{backgroundColor: '#000', minHeight: '80vh', alignItems: 'center', justifyContent: 'center', display: 'flex'}}>
-        <div className="d-flex flex-row align-items-center justify-content-center" style={{ margin: 10}}>
+        <div className="d-flex flex-column flex-lg-row align-items-center justify-content-center" style={{ margin: 10}}>
           <div className='d-flex flex-column m-2 p-4 align-items-start justify-content-start col-3' style={{backgroundColor: '#183014', borderRadius: 12, minHeight: '400px'}}>
               <p className="text-light">Our story, our future</p>
               <h6 className="text-light">India Green</h6>
@@ -172,7 +172,7 @@ export default function HomePage() {
       </section>
       <section id="upcoming" style={{minHeight: '60vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
           <h4>Upcoming Plans</h4>
-          <div className="d-flex flex-row align-items-center justify-content-around">
+          <div className="d-flex flex-column flex-lg-row align-items-center justify-content-around">
             <div className="d-flex flex-column m-4 align-items-center">
                   <h5>Basic Upcoming Planning</h5>
                   <img src="https://firebasestorage.googleapis.com/v0/b/indiagreen-b1d80.appspot.com/o/comming.jpg?alt=media&token=519eb431-1e74-455c-b13d-7dd1d4e69b94" style={{height: 200, width: 200}} />
@@ -223,6 +223,6 @@ export default function HomePage() {
                 </div>
           </div>
       </section>
-    </>
+    </div>
   )
 }
