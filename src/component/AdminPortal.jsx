@@ -31,15 +31,10 @@ function AdminPortal() {
     }
     getData();
   }, [])
-  const setDatas1 = ()=> {
-    userDb.get().then((query)=> {
-        const list = query.docs;
-        for(let i=0; i<list.length; i++){
-            list[i].ref.update({
-                blocked: 0
-            })
-        }
-    })
+  const setDatas1 = async ()=> {
+    await userDb.doc('').get().then((query)=> {
+        console.log(query.data());
+    }).catch(err=> console.error(err));
   }
   const [disable, setDisable] = useState(false);
   const sendReturn = async()=> {

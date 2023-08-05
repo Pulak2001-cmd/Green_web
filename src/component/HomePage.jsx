@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
+import { Link } from 'react-router-dom';
 
 export default function HomePage() {
   const [basic, setBasic] = useState([]);
@@ -71,6 +72,15 @@ export default function HomePage() {
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="#">Our Goal</a>
+              </li>
+              <li class="nav-item">
+                <Link class="nav-link" to="/privacy">Privacy Policy</Link>
+              </li>
+              <li class="nav-item">
+                <Link class="nav-link" to="/refund">Refund Policy</Link>
+              </li>
+              <li class="nav-item">
+                <Link class="nav-link" to="/terms">Terms & Conditions</Link>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="#">Contact</a>
