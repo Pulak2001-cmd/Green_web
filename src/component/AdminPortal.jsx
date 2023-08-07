@@ -8,14 +8,20 @@ function AdminPortal() {
   const userDb = firebase.firestore().collection('newData');
   const transactionDb = firebase.firestore().collection('transactions');
   const updateDb = firebase.firestore().collection('Update');
+  const withdrawDb = firebase.firestore().collection('withdraw');
   const [rewardAmount, setRewardAmount] = useState(0);
   const [rewradDetails, setRewradDetails] = useState('');
+  const [withdrawData, setWithdrawData] = useState([]);
   const navigation = useNavigate();
   const logout = () =>{ 
     localStorage.removeItem('admin');
     navigation('/');
   }
   useEffect(()=> {
+    const admin = localStorage.getItem('admin');
+    if(!admin) {
+        navigation('/admin');
+    }
     async function getData(){
         var today = new Date();
         var tt = `${today.getFullYear()}/${today.getMonth()+1}/${today.getDate()} ${today.getHours()}:${today.getMinutes()}:${today.getSeconds()}`
@@ -28,6 +34,16 @@ function AdminPortal() {
                 setDisable(true);
             }
         })
+        let datas = [];
+        await withdrawDb.get('status', '==', 'Pending').then(async(result)=> {
+            const list = result.docs;
+            for(let i = 0; i < list.length; i++) {
+                let singleData = list[i].data();
+                singleData['id'] = list[i].id;
+                datas.push(singleData);
+            }
+        })
+        setWithdrawData(datas);
     }
     getData();
   }, [])
@@ -243,6 +259,52 @@ function AdminPortal() {
             <input type="text" className="form-control m-3" placeholder="Enter Title" value={title} onChange={(e)=> setTitle(e.target.value)}/>
             <textarea type="text" className="form-control m-3" placeholder="Enter body" value={body} onChange={(e)=> setBody(e.target.value)}/>
             <button className="btn btn-primary" onClick={send}>Send Notification</button>
+        </div>
+
+        <div className="m-5 d-flex flex-column">
+            <div className="d-flex align-items-center justify-content-center">
+            <h3 className="m-4">Withdraw Requests</h3>
+            </div>
+            <div className="d-flex flex-row align-items-center justify-content-around">
+                <h5>Bank Account Details</h5>
+                <h5 className="d-flex align-items-center justify-content-center">Phone Number</h5>
+                <h5 className="d-flex align-items-center justify-content-center">Amount</h5>
+                <h5 className="d-flex align-items-center justify-content-center">Status</h5>
+            </div>
+            {withdrawData.map((i, index) =>(
+                <div key={index} className="d-flex flex-row align-items-center justify-content-around">
+                    <div className="d-flex flex-column">
+                        <span className="fw-bold">Account No. - </span> {i.bank_details.account_number}
+                        <span className="fw-bold">Account Holder - </span> {i.bank_details.account_holder}
+                        <span className="fw-bold">IFSC - </span> {i.bank_details.ifsc_code}
+                    </div>
+                    <div className="d-flex align-items-center justify-content-center">
+                        {i.phone}
+                    </div>
+                    <div className="d-flex align-items-center justify-content-center">
+                        {i.amount}
+                    </div>
+                    <div className='align-items-center justify-content-center d-flex'>
+                        <button onClick={async()=> {
+                            await withdrawDb.doc(i.id).get().then(async(query)=> {
+                                await query.ref.update({
+                                    status: 'Success'
+                                })
+                            })
+                            var today = new Date();
+                            var tt = `${today.getFullYear()}/${today.getMonth()+1}/${today.getDate()} ${today.getHours()}:${today.getMinutes()}:${today.getSeconds()}`
+                            await transactionDb.add({
+                                id: i.id,
+                                phone: i.phone,
+                                amount: rewardAmount,
+                                time: tt,
+                                message: "Success! Sent to your bank account"
+                            })
+                            window.location.reload();
+                        }} className={`btn btn-${i.status === 'Pending' ? 'danger': 'success'}`} disabled={i.status === 'Success'}>{i.status}</button>
+                    </div>
+                </div>
+            ))}
         </div>
         {/* <button className="btn btn-primary" onClick={setDatas1}>Send data</button> */}
         <div className="m-5">
