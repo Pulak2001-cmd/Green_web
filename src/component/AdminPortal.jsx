@@ -296,7 +296,7 @@ function AdminPortal() {
                             await transactionDb.add({
                                 id: i.id,
                                 phone: i.phone,
-                                amount: rewardAmount,
+                                amount: i.amount,
                                 time: tt,
                                 message: "Success! Sent to your bank account"
                             })
