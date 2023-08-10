@@ -7,9 +7,9 @@ export default function Refund() {
         <div class= 'compalinace-page'>
             <div class= 'header-conatiner'>
                         <div class= 'merchant-logo'>
-                <div class= 'logo-container'><div class= 'logo-text'>W</div></div>
+                <div class= 'logo-container'><div class= 'logo-text'>I</div></div>
             </div>
-                                        <p class= 'header-text'>WAZED ALI</p>
+                                        <p class= 'header-text'>INDIAGREEN</p>
         </div>
             <div class='compalinace-content'>
                                                     <div class='content-container'>

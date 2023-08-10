@@ -7,9 +7,9 @@ export default function Terms() {
         <div class= 'compalinace-page'>
             <div class= 'header-conatiner'>
                         <div class= 'merchant-logo'>
-                <div class= 'logo-container'><div class= 'logo-text'>W</div></div>
+                <div class= 'logo-container'><div class= 'logo-text'>I</div></div>
             </div>
-                                        <p class= 'header-text'>WAZED ALI</p>
+                                        <p class= 'header-text'>INDIAGREEN</p>
         </div>
             <div class='compalinace-content'>
                                                                             <div class='content-container'>
@@ -30,11 +30,11 @@ export default function Terms() {
         Welcome to our website. If you continue to browse and use this website you
         are agreeing to comply with and be bound by the following terms and
         conditions of use, which together with our privacy policy govern
-        WAZED ALI''s relationship with you in
+        INDIAGREEN''s relationship with you in
         relation to this website.
     </p>
     <p class='content-text'>
-        The term 'WAZED ALI' or 'us' or 'we' refers
+        The term 'INDIAGREEN' or 'us' or 'we' refers
         to the owner of the website whose registered/operational office is
         Latkeshab pur, Champatali
         South Dinajpur
@@ -101,7 +101,7 @@ export default function Terms() {
         <li class='list-item'>
             <p class='content-text list-text'>
                 You may not create a link to this website from another website or
-                document without WAZED ALI’s prior
+                document without INDIAGREEN’s prior
                 written consent.
             </p>
         </li>
