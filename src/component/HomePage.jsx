@@ -58,7 +58,7 @@ export default function HomePage() {
       <nav class="navbar bg-dark border-bottom border-body" data-bs-theme="dark">
       <nav class="navbar navbar-expand-lg bg-dark">
         <div class="container-fluid">
-          <a class="navbar-brand" href="#">Navbar</a>
+          <a class="navbar-brand" href="#">IndiaGreen</a>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
@@ -68,10 +68,10 @@ export default function HomePage() {
                 <a class="nav-link active" aria-current="page" href="#">Home</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="#">About Us</a>
+                <a class="nav-link" href="#about">About Us</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="#">Our Goal</a>
+                <a class="nav-link" href="#upcoming">Our Goal</a>
               </li>
               <li class="nav-item">
                 <Link class="nav-link" to="/privacy">Privacy Policy</Link>
@@ -83,7 +83,7 @@ export default function HomePage() {
                 <Link class="nav-link" to="/terms">Terms & Conditions</Link>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="#">Contact</a>
+                <a class="nav-link" href="#contact">Contact</a>
               </li>
             </ul>
           </div>

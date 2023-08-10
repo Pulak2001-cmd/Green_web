@@ -282,7 +282,7 @@ function AdminPortal() {
                         {i.phone}
                     </div>
                     <div className="d-flex align-items-center justify-content-center">
-                        {i.amount}
+                        {parseFloat(i.amount)*0.9}
                     </div>
                     <div className='align-items-center justify-content-center d-flex'>
                         <button onClick={async()=> {
