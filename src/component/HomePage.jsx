@@ -55,8 +55,8 @@ export default function HomePage() {
   const [phone, setPhone] = useState();
   return (
     <div>
+      {/* <nav class="navbar navbar-expand-lg bg-dark"> */}
       <nav class="navbar bg-dark border-bottom border-body" data-bs-theme="dark">
-      <nav class="navbar navbar-expand-lg bg-dark">
         <div class="container-fluid">
           <a class="navbar-brand" href="#">IndiaGreen</a>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -89,7 +89,7 @@ export default function HomePage() {
           </div>
         </div>
       </nav>
-      </nav>
+      {/* </nav> */}
       <section id="home" style={{backgroundImage: `url('/background.avif')`, backgroundRepeat: 'no-repeat', backgroundSize: 'cover', width: '100%', minHeight: '90vh'}} className='d-flex flex-column flex-lg-row align-items-center justify-content-around'>
           <div className="d-flex flex-column">
             <h1 className="text-light">INDIAGREEN</h1>
