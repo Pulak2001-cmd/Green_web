@@ -335,7 +335,7 @@ function AdminPortal() {
                 <div className="d-flex flex-row flex-lg-column align-items-center justify-content-center mt-3">
                     <h5>Block / Unblock</h5>
                     <div className="d-flex flex-column mt-lg-1 ms-lg-0 ms-5">
-                        <button className={`btn btn-${data.blocked === 0 ? 'danger':'success'}`} onClick={blockUser}> {data.blocked === 0 ? 'Block' : 'Unblock'} </button>
+                        <button className={`btn btn-${ data.blocked === undefined || data.blocked === 0 ? 'danger':'success'}`} onClick={blockUser}> { data.blocked === undefined  || data.blocked === 0 ? 'Block' : 'Unblock'} </button>
                     </div>
                 </div>
                 <div className="d-flex flex-row flex-lg-column align-items-center justify-content-center mt-3">
