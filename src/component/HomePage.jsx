@@ -119,7 +119,7 @@ export default function HomePage() {
                 </svg>
                 })}
               </div>
-              <p className="text-light text-justify mt-3">Lorem ipsum dolor sit amet consectetur adipisicing elit. Pariatur ducimus vero delectus, similique laudantium recusandae iste rem eaque excepturi blanditiis, dignissimos odit ipsam aut possimus </p>
+              <p className="text-light text-justify mt-3">India’s Ministry of new and Renewable Energy (MNRE) has unveiled plans to build what it terms as two “ultra mega renewable energy parks” boasting 25GW capacity at each in Jaisalmer, Rajasthan and Khavada in Gujarat, according to a letter sent to wind and solar developers in the country. Land will be made available to set up wind, wind hybrid and solar plants, with clearances provided by the respective state’s government. Given that these are border-regions, India’s defense ministry will also be involved. India green is the part of this system that can contribute to India's green energy plant production.</p>
           </div>
           <div className='d-flex col-lg-3'>
                 <img src='/about.jpeg' style={{height: '400px', width: '300px', borderRadius: 10}}/>
