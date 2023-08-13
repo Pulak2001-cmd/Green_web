@@ -227,6 +227,17 @@ function AdminPortal() {
 
     }).catch(err => console.log(err.message))
   }
+  const deleteUser = async() => {
+    await userDb.where('phone', '==', searchPhone).get().then(async (query)=> {
+        await query.docs[0].ref.delete();
+        let str = `${searchPhone} Deleted Successfully`
+        setSearchPhone('');
+        setData({})
+        alert(str)
+    }).catch(error => {
+        console.log(error.message)
+    })
+  }
   return (
     <div>
       <nav class="navbar navbar-expand-lg bg-body-tertiary">
@@ -336,6 +347,12 @@ function AdminPortal() {
                     <h5>Block / Unblock</h5>
                     <div className="d-flex flex-column mt-lg-1 ms-lg-0 ms-5">
                         <button className={`btn btn-${ data.blocked === undefined || data.blocked === 0 ? 'danger':'success'}`} onClick={blockUser}> { data.blocked === undefined  || data.blocked === 0 ? 'Block' : 'Unblock'} </button>
+                    </div>
+                </div>
+                <div className="d-flex flex-row flex-lg-column align-items-center justify-content-center mt-3">
+                    <h5>Delete Account</h5>
+                    <div className="d-flex flex-column mt-lg-1 ms-lg-0 ms-5">
+                        <button className="btn btn-danger" onClick={deleteUser}>Delete</button>
                     </div>
                 </div>
                 <div className="d-flex flex-row flex-lg-column align-items-center justify-content-center mt-3">
