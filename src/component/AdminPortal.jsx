@@ -175,6 +175,7 @@ function AdminPortal() {
   const [title, setTitle] = useState('');
   const [body, setBody] = useState('');
   const [refers, setRefers] = useState([]);
+  const [rejectMessage, setRejectMessage] = useState('');
   const getActivePlans = (activePlans)=> {
     console.log(activePlans)
     if (activePlans === undefined){
@@ -296,11 +297,12 @@ function AdminPortal() {
                 <h5 className="d-flex align-items-center justify-content-center">Status</h5>
             </div>
             {withdrawData.map((i, index) =>(
-                <div key={index} className="d-flex flex-row align-items-center justify-content-around">
+                <div key={index} className="d-flex flex-row align-items-center justify-content-around mt-5">
                     <div className="d-flex flex-column">
                         <span className="fw-bold">Account No. - </span> {i.bank_details.account_number}
                         <span className="fw-bold">Account Holder - </span> {i.bank_details.account_holder}
                         <span className="fw-bold">IFSC - </span> {i.bank_details.ifsc_code}
+                        {i.bank_details.upi !== undefined && i.bank_details.upi !== '' && <><span className="fw-bold">UPI -</span> {i.bank_details.upi}</>}
                     </div>
                     <div className="d-flex align-items-center justify-content-center">
                         {i.phone}
@@ -308,8 +310,8 @@ function AdminPortal() {
                     <div className="d-flex align-items-center justify-content-center">
                         {parseFloat(i.amount)*0.9}
                     </div>
-                    <div className='align-items-center justify-content-center d-flex'>
-                        <button onClick={async()=> {
+                    <div className='align-items-center justify-content-center d-flex flex-column'>
+                        {reject !== index && <button onClick={async()=> {
                             await withdrawDb.doc(i.id).get().then(async(query)=> {
                                 await query.ref.update({
                                     status: 'Success'
@@ -325,8 +327,20 @@ function AdminPortal() {
                                 message: "Success! Sent to your bank account"
                             })
                             window.location.reload();
-                        }} className={`btn btn-${i.status === 'Pending' ? 'danger': 'success'}`} disabled={i.status === 'Success'}>{i.status}</button>
-                        {/* {i.status === 'Pending' && <button className='btn btn-danger ms-1' onClick={()=> setReject(true)}>Reject</button>} */}
+                        }} className={`btn btn-${i.status === 'Success' ? 'success': 'danger'}`} disabled={i.status === 'Success'|| i.status === 'Rejected'}>{i.status}</button>}
+                        {i.status === 'Pending' && reject !== index && <button className='btn btn-danger mt-1' onClick={()=> setReject(index)}>Reject</button>}
+                        {reject === index && 
+                            <input type='text' value={rejectMessage} className="form-control m-3" onChange={(e)=> setRejectMessage(e.target.value)} placeholder='Enter Reason for Rejection'/>
+                        }
+                        {reject === index && <button className='btn btn-danger mt-1' onClick={async()=> {
+                            await withdrawDb.doc(i.id).get().then(async (query)=> {
+                                await query.ref.update({
+                                    status:'Rejected',
+                                    message: rejectMessage
+                                })
+                            })
+                            window.location.reload();
+                        }}>Submit</button>}
                     </div>
                 </div>
             ))}
