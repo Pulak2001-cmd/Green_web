@@ -12,6 +12,7 @@ function AdminPortal() {
   const [rewardAmount, setRewardAmount] = useState(0);
   const [rewradDetails, setRewradDetails] = useState('');
   const [withdrawData, setWithdrawData] = useState([]);
+  const [reject, setReject] = useState(false);
   const navigation = useNavigate();
   const logout = () =>{ 
     localStorage.removeItem('admin');
@@ -117,11 +118,22 @@ function AdminPortal() {
     })
   }
   const searchUser = async(str)=> {
-    await userDb.where('phone', '==', str).get().then((querySnapshot)=> {
+    await userDb.where('phone', '==', str).get().then(async (querySnapshot)=> {
         console.log(querySnapshot.docs.length);
         const dt = querySnapshot.docs[0].data();
+        let id = querySnapshot.docs[0].id;
         dt.id = querySnapshot.docs[0].id;
         setData(dt);
+        let data = [];
+        if(id){
+            await userDb.where('referral', '==', id).get().then(async(query)=> {
+                const docs = query.docs;
+                for(let i=0;i<docs.length;i++) {
+                    data.push(docs[i].data().phone);
+                }
+                setRefers(data);
+            })
+        }
     }).catch((err)=> {
         console.error(err);
         setData({});
@@ -162,6 +174,7 @@ function AdminPortal() {
   const [data, setData] = useState({});
   const [title, setTitle] = useState('');
   const [body, setBody] = useState('');
+  const [refers, setRefers] = useState([]);
   const getActivePlans = (activePlans)=> {
     console.log(activePlans)
     if (activePlans === undefined){
@@ -313,6 +326,7 @@ function AdminPortal() {
                             })
                             window.location.reload();
                         }} className={`btn btn-${i.status === 'Pending' ? 'danger': 'success'}`} disabled={i.status === 'Success'}>{i.status}</button>
+                        {/* {i.status === 'Pending' && <button className='btn btn-danger ms-1' onClick={()=> setReject(true)}>Reject</button>} */}
                     </div>
                 </div>
             ))}
@@ -367,6 +381,14 @@ function AdminPortal() {
                     <h5>Plans</h5>
                     <div className="d-flex flex-column align-items-start align-items-lg-center ms-5 m-lg-0">
                         {data.active_plan.map((i, index)=> {
+                            return <p key={index}>{i}</p>
+                        })}
+                    </div>
+                </div>
+                <div className="d-flex flex-row flex-lg-column align-items-start align-items-lg-center justify-content-center mt-3">
+                    <h5>Referrals</h5>
+                    <div className="d-flex flex-column align-items-start align-items-lg-center ms-5 m-lg-0">
+                        {refers.map((i, index)=> {
                             return <p key={index}>{i}</p>
                         })}
                     </div>
