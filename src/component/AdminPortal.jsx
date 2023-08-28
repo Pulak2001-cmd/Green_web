@@ -176,6 +176,7 @@ function AdminPortal() {
   const [body, setBody] = useState('');
   const [refers, setRefers] = useState([]);
   const [rejectMessage, setRejectMessage] = useState('');
+  const [withdrawView, setWithdrawView] = useState(false);
   const getActivePlans = (activePlans)=> {
     console.log(activePlans)
     if (activePlans === undefined){
@@ -285,67 +286,6 @@ function AdminPortal() {
             <textarea type="text" className="form-control m-3" placeholder="Enter body" value={body} onChange={(e)=> setBody(e.target.value)}/>
             <button className="btn btn-primary" onClick={send}>Send Notification</button>
         </div>
-
-        <div className="m-5 d-flex flex-column">
-            <div className="d-flex align-items-center justify-content-center">
-            <h3 className="m-4">Withdraw Requests</h3>
-            </div>
-            <div className="d-flex flex-row align-items-center justify-content-around">
-                <h5>Bank Account Details</h5>
-                <h5 className="d-flex align-items-center justify-content-center">Phone Number</h5>
-                <h5 className="d-flex align-items-center justify-content-center">Amount</h5>
-                <h5 className="d-flex align-items-center justify-content-center">Status</h5>
-            </div>
-            {withdrawData.map((i, index) =>(
-                <div key={index} className="d-flex flex-row align-items-center justify-content-around mt-5">
-                    <div className="d-flex flex-column">
-                        <span className="fw-bold">Account No. - </span> {i.bank_details.account_number}
-                        <span className="fw-bold">Account Holder - </span> {i.bank_details.account_holder}
-                        <span className="fw-bold">IFSC - </span> {i.bank_details.ifsc_code}
-                        {i.bank_details.upi !== undefined && i.bank_details.upi !== '' && <><span className="fw-bold">UPI -</span> {i.bank_details.upi}</>}
-                    </div>
-                    <div className="d-flex align-items-center justify-content-center">
-                        {i.phone}
-                    </div>
-                    <div className="d-flex align-items-center justify-content-center">
-                        {parseFloat(i.amount)*0.9}
-                    </div>
-                    <div className='align-items-center justify-content-center d-flex flex-column'>
-                        {reject !== index && <button onClick={async()=> {
-                            await withdrawDb.doc(i.id).get().then(async(query)=> {
-                                await query.ref.update({
-                                    status: 'Success'
-                                })
-                            })
-                            var today = new Date();
-                            var tt = `${today.getFullYear()}/${today.getMonth()+1}/${today.getDate()} ${today.getHours()}:${today.getMinutes()}:${today.getSeconds()}`
-                            await transactionDb.add({
-                                id: i.id,
-                                phone: i.phone,
-                                amount: i.amount,
-                                time: tt,
-                                message: "Success! Sent to your bank account"
-                            })
-                            window.location.reload();
-                        }} className={`btn btn-${i.status === 'Success' ? 'success': 'danger'}`} disabled={i.status === 'Success'|| i.status === 'Rejected'}>{i.status}</button>}
-                        {i.status === 'Pending' && reject !== index && <button className='btn btn-danger mt-1' onClick={()=> setReject(index)}>Reject</button>}
-                        {reject === index && 
-                            <input type='text' value={rejectMessage} className="form-control m-3" onChange={(e)=> setRejectMessage(e.target.value)} placeholder='Enter Reason for Rejection'/>
-                        }
-                        {reject === index && <button className='btn btn-danger mt-1' onClick={async()=> {
-                            await withdrawDb.doc(i.id).get().then(async (query)=> {
-                                await query.ref.update({
-                                    status:'Rejected',
-                                    message: rejectMessage
-                                })
-                            })
-                            window.location.reload();
-                        }}>Submit</button>}
-                    </div>
-                </div>
-            ))}
-        </div>
-        {/* <button className="btn btn-primary" onClick={setDatas1}>Send data</button> */}
         <div className="m-5">
             
             <input type="text" value={searchPhone} onChange={(e)=> {search(e.target.value)}} className="form-control" placeholder="Search Phone Number" width='200px'/>
@@ -428,6 +368,75 @@ function AdminPortal() {
             // </table>
             }
         </div>
+        <div className="m-5 d-flex flex-column">
+            <div className="d-flex align-items-center justify-content-center">
+            <h3 className="m-4">Withdraw Requests</h3>
+            </div>
+            <div className="d-flex flex-row align-items-center justify-content-around">
+                <h5>Bank Account Details</h5>
+                <h5 className="d-flex align-items-center justify-content-center">Phone Number</h5>
+                <h5 className="d-flex align-items-center justify-content-center">Amount</h5>
+                <h5 className="d-flex align-items-center justify-content-center">Status</h5>
+            </div>
+            {withdrawData.map((i, index) =>(
+                <div key={index} className="d-flex flex-row align-items-center justify-content-around mt-5">
+                    <div className="d-flex flex-column">
+                        <span className="fw-bold">Account No. - </span> {i.bank_details.account_number}
+                        <span className="fw-bold">Account Holder - </span> {i.bank_details.account_holder}
+                        <span className="fw-bold">IFSC - </span> {i.bank_details.ifsc_code}
+                        {i.bank_details.upi !== undefined && i.bank_details.upi !== '' && <><span className="fw-bold">UPI -</span> {i.bank_details.upi}</>}
+                    </div>
+                    <div className="d-flex align-items-center justify-content-center">
+                        {i.phone}
+                    </div>
+                    <div className="d-flex align-items-center justify-content-center">
+                        {parseFloat(i.amount)*0.9}
+                    </div>
+                    <div className='align-items-center justify-content-center d-flex flex-column'>
+                        {reject !== index && <button onClick={async()=> {
+                            await withdrawDb.doc(i.id).get().then(async(query)=> {
+                                await query.ref.update({
+                                    status: 'Success'
+                                })
+                            })
+                            var today = new Date();
+                            var tt = `${today.getFullYear()}/${today.getMonth()+1}/${today.getDate()} ${today.getHours()}:${today.getMinutes()}:${today.getSeconds()}`
+                            await transactionDb.add({
+                                id: i.id,
+                                phone: i.phone,
+                                amount: i.amount,
+                                time: tt,
+                                message: "Success! Sent to your bank account"
+                            })
+                            window.location.reload();
+                        }} className={`btn btn-${i.status === 'Success' ? 'success': 'danger'}`} disabled={i.status === 'Success'|| i.status === 'Rejected'}>{i.status}</button>}
+                        {i.status === 'Pending' && reject !== index && <button className='btn btn-danger mt-1' onClick={()=> setReject(index)}>Reject</button>}
+                        {reject === index && 
+                            <input type='text' value={rejectMessage} className="form-control m-3" onChange={(e)=> setRejectMessage(e.target.value)} placeholder='Enter Reason for Rejection'/>
+                        }
+                        {reject === index && <button className='btn btn-danger mt-1' onClick={async()=> {
+                            await withdrawDb.doc(i.id).get().then(async (query)=> {
+                                await query.ref.update({
+                                    status:'Rejected',
+                                    message: rejectMessage
+                                })
+                            })
+                            console.log("phone", i.phone)
+                            await userDb.where('phone', '==', i.phone).get().then(async (query)=> {
+                                var docRef=query.docs[0].ref;
+                                const data = query.docs[0].data();
+                                await docRef.update({
+                                    balance: data.balance + parseFloat(i.amount)
+                                })
+                            })
+                            window.location.reload();
+                        }}>Submit</button>}
+                    </div>
+                </div>
+            ))}
+        </div>
+        {/* <button className="btn btn-primary" onClick={setDatas1}>Send data</button> */}
+        
     </div>
   )
 }
