@@ -226,6 +226,7 @@ function AdminPortal() {
     const response = await axios.post(url, data);
     alert('Notification sent successfully')
   }
+  const [withStatus, setWithStatus] = useState('Pending')
   const blockUser = async() => {
     await userDb.where('phone', '==', searchPhone).get().then(async(query) => {
         const data = query.docs[0].data();
@@ -372,6 +373,10 @@ function AdminPortal() {
             <div className="d-flex align-items-center justify-content-center">
             <h3 className="m-4">Withdraw Requests</h3>
             </div>
+            <div className="d-flex flex-row align-items-center justify-content-center">
+                <div onClick={()=> setWithStatus("Pending")} className="col-4 m-4 align-items-center d-flex justify-content-center p-3" style={{border: '1px solid black', borderRadius: '10px', backgroundColor: withStatus === 'Pending' ? 'red': 'white', color: withStatus === 'Pending' ? 'white': 'black', cursor: 'pointer'}}>Pending</div>
+                <div onClick={()=> setWithStatus("Confirm")} className="col-4 m-4 align-items-center d-flex justify-content-center p-3" style={{border: '1px solid black', borderRadius: '10px', backgroundColor: withStatus === 'Confirm' ? 'red': 'white', color: withStatus === 'Confirm' ? 'white': 'black', cursor: 'pointer'}}>Confirm</div>
+            </div>
             <div className="d-flex flex-row align-items-center justify-content-around">
                 <h5>Bank Account Details</h5>
                 <h5 className="d-flex align-items-center justify-content-center">Phone Number</h5>
@@ -379,7 +384,63 @@ function AdminPortal() {
                 <h5 className="d-flex align-items-center justify-content-center">Status</h5>
             </div>
             {withdrawData.map((i, index) =>(
-                <div key={index} className="d-flex flex-row align-items-center justify-content-around mt-5">
+                withStatus === 'Pending' && i.status === 'Pending' && <div key={index} className="d-flex flex-row align-items-center justify-content-around mt-5">
+                    <div className="d-flex flex-column">
+                        <span className="fw-bold">Account No. - </span> {i.bank_details.account_number}
+                        <span className="fw-bold">Account Holder - </span> {i.bank_details.account_holder}
+                        <span className="fw-bold">IFSC - </span> {i.bank_details.ifsc_code}
+                        {i.bank_details.upi !== undefined && i.bank_details.upi !== '' && <><span className="fw-bold">UPI -</span> {i.bank_details.upi}</>}
+                    </div>
+                    <div className="d-flex align-items-center justify-content-center">
+                        {i.phone}
+                    </div>
+                    <div className="d-flex align-items-center justify-content-center">
+                        {parseFloat(i.amount)*0.9}
+                    </div>
+                    <div className='align-items-center justify-content-center d-flex flex-column'>
+                        {reject !== index && <button onClick={async()=> {
+                            await withdrawDb.doc(i.id).get().then(async(query)=> {
+                                await query.ref.update({
+                                    status: 'Success'
+                                })
+                            })
+                            var today = new Date();
+                            var tt = `${today.getFullYear()}/${today.getMonth()+1}/${today.getDate()} ${today.getHours()}:${today.getMinutes()}:${today.getSeconds()}`
+                            await transactionDb.add({
+                                id: i.id,
+                                phone: i.phone,
+                                amount: i.amount,
+                                time: tt,
+                                message: "Success! Sent to your bank account"
+                            })
+                            window.location.reload();
+                        }} className={`btn btn-${i.status === 'Success' ? 'success': 'danger'}`} disabled={i.status === 'Success'|| i.status === 'Rejected'}>{i.status}</button>}
+                        {i.status === 'Pending' && reject !== index && <button className='btn btn-danger mt-1' onClick={()=> setReject(index)}>Reject</button>}
+                        {reject === index && 
+                            <input type='text' value={rejectMessage} className="form-control m-3" onChange={(e)=> setRejectMessage(e.target.value)} placeholder='Enter Reason for Rejection'/>
+                        }
+                        {reject === index && <button className='btn btn-danger mt-1' onClick={async()=> {
+                            await withdrawDb.doc(i.id).get().then(async (query)=> {
+                                await query.ref.update({
+                                    status:'Rejected',
+                                    message: rejectMessage
+                                })
+                            })
+                            console.log("phone", i.phone)
+                            await userDb.where('phone', '==', i.phone).get().then(async (query)=> {
+                                var docRef=query.docs[0].ref;
+                                const data = query.docs[0].data();
+                                await docRef.update({
+                                    balance: data.balance + parseFloat(i.amount)
+                                })
+                            })
+                            window.location.reload();
+                        }}>Submit</button>}
+                    </div>
+                </div>
+            ))}
+            {withdrawData.map((i, index) =>(
+                withStatus !== 'Pending' && i.status !== 'Pending' && <div key={index} className="d-flex flex-row align-items-center justify-content-around mt-5">
                     <div className="d-flex flex-column">
                         <span className="fw-bold">Account No. - </span> {i.bank_details.account_number}
                         <span className="fw-bold">Account Holder - </span> {i.bank_details.account_holder}
