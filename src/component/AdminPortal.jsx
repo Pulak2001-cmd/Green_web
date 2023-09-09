@@ -48,11 +48,6 @@ function AdminPortal() {
     }
     getData();
   }, [])
-  const setDatas1 = async ()=> {
-    await userDb.doc('').get().then((query)=> {
-        console.log(query.data());
-    }).catch(err=> console.error(err));
-  }
   const [disable, setDisable] = useState(false);
   const sendReturn = async()=> {
     var today = new Date();
@@ -193,26 +188,22 @@ function AdminPortal() {
     return ans;
   }
   const setDatas = async()=> {
-    var obj = {}
-    await db.get().then(async(query)=> {
-        const list = query.docs;
-        for(let i=0; i<list.length; i++) {
-            const dt = list[i].data();
-            if (Object.keys(obj).includes(dt.phone)){
-                obj[dt.phone] += parseInt(dt.amount.replace('₹ ', ''));
-            } else {
-                obj[dt.phone] = parseInt(dt.amount.replace('₹ ', ''));
-            }
-        }
-        console.table(obj);
-        for(const phone in obj) {
-            await userDb.where('phone', '==', phone).get().then((q)=> {
-                q.docs[0].ref.update({ 
-                    totalInvestment: obj[phone]
+    await db.get().then(async (query)=> {
+        let data = query.docs;
+        console.log(data.length);
+        for(let i=0; i<data.length; i++) {
+            let amount = data[i].data().amount.replace('₹ ', '');
+            let phone = data[i].data().phone;
+            await userDb.where('phone', '==', phone).get().then(async(query1)=> {
+                let data = query1.docs[0].data();
+                let highestInvestment = data.highestInvestment;
+                console.log(amount, phone, highestInvestment);
+                query1.docs[0].ref.update({
+                    highestInvestment: amount > highestInvestment ? amount : highestInvestment
                 })
-            }).catch((err)=> {console.error(err);})
+            })
         }
-    }).catch((err)=> {console.error(err)})
+    })
   }
   const send = async()=> {
     const url = "https://app.nativenotify.com/api/notification";
@@ -496,7 +487,7 @@ function AdminPortal() {
                 </div>
             ))}
         </div>
-        {/* <button className="btn btn-primary" onClick={setDatas1}>Send data</button> */}
+        {/* <button className="btn btn-primary" onClick={setDatas}>Send data</button> */}
         
     </div>
   )
