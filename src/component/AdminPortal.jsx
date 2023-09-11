@@ -81,22 +81,17 @@ function AdminPortal() {
         }
         console.table(returns)
         for(const phone in returns){
-            await userDb.where('phone', '==', phone).get().then((q1)=> {
+            await userDb.where('phone', '==', phone).get().then(async(q1)=> {
                 const dc = q1.docs;
                 for(let j=0;j<dc.length;j++){
-                    console.log(j);
-                    if(j>0){
-                        break;
-                    }
                     const userData = dc[j].data();
-                    console.log(userData.balance, returns[phone]);
                     const data = dc[j].data();
-                    dc[j].ref.update({
+                    await dc[j].ref.update({
                         balance: userData.balance+returns[phone],
                         yesterdayEarning: returns[phone],
                         totalEarning: data.totalEarning + returns[phone]
                     })
-                    transactionDb.add({
+                    await transactionDb.add({
                         id: dc[j].id,
                         phone: phone,
                         amount: returns[phone],
