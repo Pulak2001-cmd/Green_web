@@ -84,6 +84,9 @@ function AdminPortal() {
             await userDb.where('phone', '==', phone).get().then(async(q1)=> {
                 const dc = q1.docs;
                 for(let j=0;j<dc.length;j++){
+                    if (j>0){
+                       break;
+                    }
                     const userData = dc[j].data();
                     const data = dc[j].data();
                     await dc[j].ref.update({
