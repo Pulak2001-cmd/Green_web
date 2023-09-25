@@ -9,9 +9,11 @@ function AdminPortal() {
   const transactionDb = firebase.firestore().collection('transactions');
   const updateDb = firebase.firestore().collection('Update');
   const withdrawDb = firebase.firestore().collection('withdraw');
+  const rechargeDb = firebase.firestore().collection('recharge');
   const [rewardAmount, setRewardAmount] = useState(0);
   const [rewradDetails, setRewradDetails] = useState('');
   const [withdrawData, setWithdrawData] = useState([]);
+  const [rechargeRequest, setRechargeRequest] = useState([]);
   const [reject, setReject] = useState(false);
   const navigation = useNavigate();
   const logout = () =>{ 
@@ -45,6 +47,17 @@ function AdminPortal() {
             }
         })
         setWithdrawData(datas);
+
+        let arr = [];
+        await rechargeDb.get().then(async(query)=> {
+            const list = query.docs;
+            for (let i = 0; i < list.length; i++) {
+                let singleData = list[i].data();
+                singleData['id'] = list[i].id;
+                arr.push(singleData);
+            }
+        })
+        setRechargeRequest(arr);
     }
     getData();
   }, [])
@@ -484,6 +497,75 @@ function AdminPortal() {
                     </div>
                 </div>
             ))}
+        </div>
+        <div className='m-5 d-flex flex-column'>
+            <div className='d-flex align-items-center justify-content-center'>
+                <h3>Recharge Requests</h3>
+            </div>
+            <table class="table">
+            <thead>
+                <tr>
+                <th scope="col">#</th>
+                <th scope="col">UPI ID</th>
+                <th scope="col">Amount</th>
+                <th scope="col">Phone</th>
+                <th scope="col">Transaction ID</th>
+                <th scope="col">Action Center / Status</th>
+                </tr>
+            </thead>
+            <tbody>
+            {rechargeRequest.map((i, index)=> (
+                <tr key={index}>
+                    <th scope='row'>{i.id}</th>
+                    <td>{i.UPI}</td>
+                    <td>{i.amount}</td>
+                    <td>{i.phone}</td>
+                    <td>{i.transaction_id}</td>
+                    {i.status === 'pending' ? <td>
+                        <button className='btn btn-success ms-2' onClick={async()=> {
+                            await rechargeDb.doc(i.id).get().then(async (query)=> {
+                                const data = query.data();
+                                await query.ref.update({
+                                    status: 'Success'
+                                })
+                                const phone = data.phone;
+                                const amount = data.amount;
+                                await userDb.where('phone', '==', phone).get().then(async (query1)=> {
+                                    const data = query1.docs[0].data();
+                                    console.log(data.balance, amount);
+                                    await query1.docs[0].ref.update({
+                                        balance: data.balance + amount,
+                                    })
+                                    var today = new Date();
+                                    var tt = `${today.getFullYear()}/${today.getMonth()+1}/${today.getDate()} ${today.getHours()}:${today.getMinutes()}:${today.getSeconds()}`;
+                                    await transactionDb.add({
+                                        id: query1.docs[0].id,
+                                        phone: phone,
+                                        amount: amount,
+                                        time: tt,
+                                        message: 'Success!, Credited to account',
+                                        type: 'recharge'
+                                    })
+                                })
+                            })
+                            window.location.reload();
+                        }}>Approve</button>
+                        <button className='btn btn-danger ms-2' onClick={async()=> {
+                            await rechargeDb.doc(i.id).get().then(async (query)=> {
+                                await query.ref.update({
+                                    'status': 'Rejected'
+                                })
+                                window.location.reload();
+                            })
+                        }}>Reject</button>
+                    </td> : 
+                    <td style={{color: i.status === 'Rejected' ? 'red' : 'green', fontWeight: 'bold'}}>
+                        {i.status}
+                    </td>}
+                </tr>
+            ))}
+            </tbody>
+            </table>
         </div>
         {/* <button className="btn btn-primary" onClick={setDatas}>Send data</button> */}
         
