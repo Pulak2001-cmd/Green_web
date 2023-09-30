@@ -382,6 +382,7 @@ function AdminPortal() {
             <div className="d-flex flex-row align-items-center justify-content-around">
                 <h5>Bank Account Details</h5>
                 <h5 className="d-flex align-items-center justify-content-center">Phone Number</h5>
+                <h5 className="d-flex align-items-center justify-content-center">Time</h5>
                 <h5 className="d-flex align-items-center justify-content-center">Amount</h5>
                 <h5 className="d-flex align-items-center justify-content-center">Status</h5>
             </div>
@@ -395,6 +396,9 @@ function AdminPortal() {
                     </div>
                     <div className="d-flex align-items-center justify-content-center">
                         {i.phone}
+                    </div>
+                    <div className="d-flex align-items-center justify-content-center">
+                        {i.time}
                     </div>
                     <div className="d-flex align-items-center justify-content-center">
                         {parseFloat(i.amount)*0.9}
@@ -451,6 +455,9 @@ function AdminPortal() {
                     </div>
                     <div className="d-flex align-items-center justify-content-center">
                         {i.phone}
+                    </div>
+                    <div className="d-flex align-items-center justify-content-center">
+                        {i.time}
                     </div>
                     <div className="d-flex align-items-center justify-content-center">
                         {parseFloat(i.amount)*0.9}
@@ -510,6 +517,7 @@ function AdminPortal() {
                 <th scope="col">Amount</th>
                 <th scope="col">Phone</th>
                 <th scope="col">Transaction ID</th>
+                <th scope="col">Time</th>
                 <th scope="col">Action Center / Status</th>
                 </tr>
             </thead>
@@ -521,6 +529,7 @@ function AdminPortal() {
                     <td>{i.amount}</td>
                     <td>{i.phone}</td>
                     <td>{i.transaction_id}</td>
+                    <td>{i.time}</td>
                     {i.status === 'pending' ? <td>
                         <button className='btn btn-success ms-2' onClick={async()=> {
                             await rechargeDb.doc(i.id).get().then(async (query)=> {
