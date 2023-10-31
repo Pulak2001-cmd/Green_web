@@ -83,6 +83,16 @@ function AdminPortal() {
             let endDate =new Date(data.endDate);
             if (today > endDate){
                 console.log('expired');
+                if(data.new_type === 'new' && data.principle_retured === false){
+                    if(data.phone in returns){
+                        returns[data.phone] += parseFloat(data.amount.replace('₹ ', ''))
+                    } else {
+                        returns[data.phone] = parseFloat(data.amount.replace('₹ ', ''))
+                    }
+                    await docs[i].ref.update({
+                        principle_retured: true
+                    })
+                }
             } else {
                 console.log(data.phone);
                 if (data.phone in returns){
